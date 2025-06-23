@@ -5,7 +5,7 @@ from textnode import TextNode, TextType, text_node_to_html_node
 class TestTextNode(unittest.TestCase):
     def test_prop_text(self):
         text = "This is some text."
-        node = TextNode(text, TextType.PLAIN)
+        node = TextNode(text, TextType.TEXT)
         self.assertEqual(text, node.text)
 
     def test_prop_text_type(self):
@@ -38,7 +38,7 @@ class TestTextNode(unittest.TestCase):
     
     def test_text_node_to_html_node_PLAIN(self):
         value = "This is a(n) PLAIN node."
-        text = TextNode(value, text_type=TextType.PLAIN)
+        text = TextNode(value, text_type=TextType.TEXT)
         html_node = text_node_to_html_node(text)
         self.assertEqual(html_node.value, value)
         self.assertEqual(html_node.tag, None)
