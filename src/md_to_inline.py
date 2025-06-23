@@ -2,6 +2,7 @@ import re
 from typing import List, Tuple
 from textnode import TextNode, TextType
 
+
 def text_to_textnodes(text: str) -> List[TextNode]:
     return split_nodes_link(
         split_nodes_image(

@@ -1,9 +1,9 @@
 import unittest
 
-from md_to_html_functions import extract_markdown_images, extract_markdown_links, split_nodes_delimiter, split_nodes_image, split_nodes_link, text_to_textnodes
+from md_to_inline import extract_markdown_images, extract_markdown_links, split_nodes_delimiter, split_nodes_image, split_nodes_link, text_to_textnodes
 from textnode import TextNode, TextType
 
-class TestMdToHTMLFunctions(unittest.TestCase):
+class TestMdToInline(unittest.TestCase):
     def test_split_nodes_delimiter_uneven(self):
         text = r"This is a **bold statement."
         start_node = TextNode(text, text_type=TextType.TEXT)
