@@ -34,7 +34,7 @@ def block_to_heading_node(block: str) -> HTMLNode:
     splits = block.split("# ")
     hash_length = len(splits[0]) + 1
     title = splits[1]
-    return LeafNode(f"h{hash_length}", title)
+    return ParentNode(f"h{hash_length}", text_to_children(title))
 
 def block_to_code_node(block: str) -> HTMLNode:
     return ParentNode("pre", [text_node_to_html_node(TextNode("\n".join(block.split("\n")[1:-1]), TextType.CODE))])

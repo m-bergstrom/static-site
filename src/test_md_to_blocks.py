@@ -78,7 +78,7 @@ This is the same paragraph on a new line""")
 
     def test_block_to_heading_node(self):
         block = "### Simulations"
-        self.assertEqual(block_to_heading_node(block), LeafNode("H3", "Simulations"))
+        self.assertEqual(block_to_heading_node(block), ParentNode("h3", [LeafNode(None,"Simulations")]))
 
     def test_block_to_code_node(self):
         block="""```py
@@ -107,8 +107,6 @@ def sqr(i)
                              ParentNode("li", [LeafNode(None, "second -- deu")]),
                              ParentNode("li", [LeafNode(None, "third")])
                              ])
-        print(node)
-        print(standard)
         
         self.assertEqual(node, standard)
 
@@ -122,8 +120,6 @@ def sqr(i)
                              ParentNode("li", [LeafNode(None, "second. deu")]),
                              ParentNode("li", [LeafNode(None, "third")])
                              ])
-        print(node)
-        print(standard)
         
         self.assertEqual(node, standard)
     
@@ -132,9 +128,9 @@ def sqr(i)
 > half a league,
 > half a league onward"""
         self.assertEqual(block_to_quote_node(block),
-                         ParentNode("blockquote", [LeafNode(None, """ half a league,
- half a league,
- half a league onward""")]))
+                         ParentNode("blockquote", [LeafNode(None, """half a league,
+half a league,
+half a league onward""")]))
 
 if __name__ == "__main__":
     unittest.main()
