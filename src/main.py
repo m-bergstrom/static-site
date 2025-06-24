@@ -1,12 +1,14 @@
 from os import listdir, mkdir, path, remove
 import shutil
+import sys
 
 from blocktype import BlockType, block_to_block_type
 from md_to_blocks import block_to_heading_node, markdown_to_blocks, markdown_to_html_node
 
 def main():
-    copy_static(path.abspath("./static"), path.abspath("./public"))
-    generate_pages_recursive(path.abspath("./content"), path.abspath("./template.html"), path.abspath("./public/"))
+    siteroot = sys.argv[1] if len(sys.argv) > 1 else "/"
+    copy_static(path.abspath("./static"), path.abspath("./docs"))
+    generate_pages_recursive(siteroot, path.abspath("./content"), path.abspath("./template.html"), path.abspath("./docs/"))
 
 def copy_static(source: str, target :str):
     if path.exists(target):
@@ -47,18 +49,18 @@ def extract_title(markdown: str):
     except StopIteration:
         raise Exception("No top-level header found")
     
-def generate_pages_recursive(dir_path_content: str, template_path: str, dest_dir_path: str):
+def generate_pages_recursive(siteroot: str, dir_path_content: str, template_path: str, dest_dir_path: str):
     entries = listdir(dir_path_content)
     for entry in entries:
         full_entry_path = path.join(dir_path_content, entry)
         if path.isfile(full_entry_path):
             if entry.endswith(".md"):
                 entry = path.splitext(entry)[0] + ".html"
-                generate_page(full_entry_path, template_path, path.join(dest_dir_path, entry))
+                generate_page(siteroot, full_entry_path, template_path, path.join(dest_dir_path, entry))
         else:
-            generate_pages_recursive(full_entry_path, template_path, path.join(dest_dir_path, entry))
+            generate_pages_recursive(siteroot, full_entry_path, template_path, path.join(dest_dir_path, entry))
 
-def generate_page(from_path: str, template_path: str, dest_path: str):
+def generate_page(siteroot: str, from_path: str, template_path: str, dest_path: str):
     print(f'Generating page from {from_path} to {dest_path} using {template_path}')
     with open(from_path, "r") as source:
         with open(template_path, "r") as template:
@@ -66,7 +68,7 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
             template_text = template.read()
             content = markdown_to_html_node(source_text).to_html()
             title = extract_title(source_text)
-            dest_text = template_text.replace("{{ Title }}", title).replace("{{ Content }}", content)
+            dest_text = template_text.replace("{{ Title }}", title).replace("{{ Content }}", content).replace('href="/', f'href="{siteroot}').replace('src="/', f'src="{siteroot}')
 
             if not path.exists(path.dirname(dest_path)):
                 create_directory(path.dirname(dest_path))
